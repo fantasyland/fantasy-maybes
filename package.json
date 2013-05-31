@@ -1,0 +1,24 @@
+{
+  "name": "fantasy-options",
+  "version": "0.0.0",
+  "description": "Option data structure.",
+  "main": "option.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/puffnfresh/fantasy-options.git"
+  },
+  "keywords": [
+    "fantasyland",
+    "option",
+    "monad"
+  ],
+  "author": "Brian McKenna",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/puffnfresh/fantasy-options/issues"
+  },
+  "dependencies": {
+    "daggy": "0.0.1"
+  }
+}
