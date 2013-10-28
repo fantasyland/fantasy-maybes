@@ -43,16 +43,11 @@ Option.prototype.chain = function(f) {
     );
 };
 Option.prototype.concat = function(x) {
-    return this.fold(
-        function(a) {
-            return x.chain(function(b) {
-                return Option.Some(a.concat(b));
-            });
-        },
-        function() {
-            return b;
-        }
-    );
+    return this,chain(function(a) {
+        return x.map(function(b) {
+            return a.concat(b);
+        });
+    });
 };
 
 // Derived
