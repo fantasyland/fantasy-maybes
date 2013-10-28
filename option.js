@@ -1,4 +1,5 @@
 var daggy = require('daggy'),
+    C = require('fantasy-combinators'),
     Option = daggy.taggedSum({
         Some: ['x'],
         None: []
@@ -14,9 +15,7 @@ Option.prototype.fold = function(f, g) {
 Option.of = Option.Some;
 Option.prototype.orElse = function(x) {
     return this.fold(
-        function(x) {
-            return Option.Some(x);
-        },
+        Option.Some,
         function() {
             return x;
         }
@@ -24,9 +23,7 @@ Option.prototype.orElse = function(x) {
 };
 Option.prototype.getOrElse = function(x) {
     return this.fold(
-        function(a) {
-            return a;
-        },
+        C.identity,
         function() {
             return x;
         }
