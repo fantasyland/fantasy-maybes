@@ -43,7 +43,7 @@ Option.prototype.chain = function(f) {
     );
 };
 Option.prototype.concat = function(x) {
-    return this,chain(function(a) {
+    return this.chain(function(a) {
         return x.map(function(b) {
             return a.concat(b);
         });
