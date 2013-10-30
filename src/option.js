@@ -1,5 +1,32 @@
+//
+//   # Option
+//
+//       Option a = Some a + None
+//
+//   The option type encodes the presence and absence of a value. The
+//   `Some` constructor represents a value and `None` represents the
+//   absence.
+//
+//   * `ap(s)` - Applicative ap(ply)
+//   * `chain(f)` - Monadic flatMap/bind
+//   * `concat(s, plus)` - Semigroup concat
+//   * `fold(a, b)` - Applies `a` to value if `Some` or defaults to `b`
+//   * `orElse(a)` - Default value for `None`
+//   * `getOrElse(a)` - Default value for `None`
+//   * `map(f)` - Functor map
+//
 var daggy = require('daggy'),
-    C = require('fantasy-combinators'),
+    combinators = require('fantasy-combinators'),
+
+    constant = combinators.constant,
+    identity = combinators.identity,
+
+    error = function(str) {
+        return function() {
+            throw new Error(str);
+        };
+    },
+
     Option = daggy.taggedSum({
         Some: ['x'],
         None: []
@@ -16,14 +43,12 @@ Option.of = Option.Some;
 Option.prototype.orElse = function(x) {
     return this.fold(
         Option.Some,
-        function() {
-            return x;
-        }
+        constant(x)
     );
 };
 Option.prototype.getOrElse = function(x) {
     return this.fold(
-        C.identity,
+        identity,
         function() {
             return x;
         }
@@ -56,6 +81,28 @@ Option.prototype.map = function(f) {
 Option.prototype.ap = function(a) {
     return this.chain(function(f) {
         return a.map(f);
+    });
+};
+
+Option.prototype.sequence = function() {
+    var x = this.cata({
+        Some: function(x) {
+            return x.constructor;
+        },
+        None: error('Unable to sequence on None')
+    });
+    return this.traverse(function(x) {
+        return x.traverse(identity, Option);
+    }, x);
+};
+Option.prototype.traverse = function(f, p) {
+    return this.cata({
+        Some: function(x) {
+            return p.of(f(x));
+        },
+        None: function() {
+            return p.of(Option.None);
+        }
     });
 };
 
@@ -114,5 +161,5 @@ Option.OptionT = function(M) {
 };
 
 // Export
-if(typeof module != 'undefined')
+if (typeof module != 'undefined')
     module.exports = Option;
