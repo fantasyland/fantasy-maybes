@@ -45,6 +45,10 @@ var λ = require('fantasy-check/src/adapters/nodeunit'),
     isIdentity = helpers.isInstanceOf(Identity),
     isIdentityOf = helpers.isInstanceOf(identityOf);
 
+function run(a) {
+    return a.run.x;
+}
+
 function identityOf(type) {
     var self = this.getInstance(this, identityOf);
     self.type = type;
@@ -79,19 +83,22 @@ function noneOf() {
 exports.option = {
 
     // Applicative Functor tests
-    'Identity (Applicative)': applicative.identity(λ)(Option),
-    'Composition (Applicative)': applicative.composition(λ)(Option),
-    'Homomorphism (Applicative)': applicative.homomorphism(λ)(Option),
-    'Interchange (Applicative)': applicative.interchange(λ)(Option),
+    'All (Applicative)': applicative.laws(λ)(Option, identity),
+    'Identity (Applicative)': applicative.identity(λ)(Option, identity),
+    'Composition (Applicative)': applicative.composition(λ)(Option, identity),
+    'Homomorphism (Applicative)': applicative.homomorphism(λ)(Option, identity),
+    'Interchange (Applicative)': applicative.interchange(λ)(Option, identity),
 
     // Functor tests
-    'Identity (Functor)': functor.identity(λ)(Option.of),
-    'Composition (Functor)': functor.composition(λ)(Option.of),
+    'All (Functor)': functor.laws(λ)(Option.of, identity),
+    'Identity (Functor)': functor.identity(λ)(Option.of, identity),
+    'Composition (Functor)': functor.composition(λ)(Option.of, identity),
 
     // Monad tests
-    'Left Identity (Monad)': monad.leftIdentity(λ)(Option),
-    'Right Identity (Monad)': monad.rightIdentity(λ)(Option),
-    'Associativity (Monad)': monad.associativity(λ)(Option),
+    'All (Monad)': monad.laws(λ)(Option, identity),
+    'Left Identity (Monad)': monad.leftIdentity(λ)(Option, identity),
+    'Right Identity (Monad)': monad.rightIdentity(λ)(Option, identity),
+    'Associativity (Monad)': monad.associativity(λ)(Option, identity),
 
     // Manual tests
     'when testing Some with concat should return correct value': λ.check(
@@ -232,17 +239,20 @@ exports.option = {
 exports.optionT = {
 
     // Applicative Functor tests
-    'Identity (Applicative)': applicative.identity(λ)(Option.OptionT(Option)),
-    'Composition (Applicative)': applicative.composition(λ)(Option.OptionT(Option)),
-    'Homomorphism (Applicative)': applicative.homomorphism(λ)(Option.OptionT(Option)),
-    'Interchange (Applicative)': applicative.interchange(λ)(Option.OptionT(Option)),
+    'All (Applicative)': applicative.laws(λ)(Option.OptionT(Identity), run),
+    'Identity (Applicative)': applicative.identity(λ)(Option.OptionT(Identity), run),
+    'Composition (Applicative)': applicative.composition(λ)(Option.OptionT(Identity), run),
+    'Homomorphism (Applicative)': applicative.homomorphism(λ)(Option.OptionT(Identity), run),
+    'Interchange (Applicative)': applicative.interchange(λ)(Option.OptionT(Identity), run),
 
     // Functor tests
-    'Identity (Functor)': functor.identity(λ)(Option.OptionT(Option).of),
-    'Composition (Functor)': functor.composition(λ)(Option.OptionT(Option).of),
+    'All (Functor)': functor.laws(λ)(Option.OptionT(Identity).of, run),
+    'Identity (Functor)': functor.identity(λ)(Option.OptionT(Identity).of, run),
+    'Composition (Functor)': functor.composition(λ)(Option.OptionT(Identity).of, run),
 
     // Monad tests
-    'Left Identity (Monad)': monad.leftIdentity(λ)(Option.OptionT(Option)),
-    'Right Identity (Monad)': monad.rightIdentity(λ)(Option.OptionT(Option)),
-    'Associativity (Monad)': monad.associativity(λ)(Option.OptionT(Option))
+    'All (Monad)': monad.laws(λ)(Option.OptionT(Identity), run),
+    'Left Identity (Monad)': monad.leftIdentity(λ)(Option.OptionT(Identity), run),
+    'Right Identity (Monad)': monad.rightIdentity(λ)(Option.OptionT(Identity), run),
+    'Associativity (Monad)': monad.associativity(λ)(Option.OptionT(Identity), run)
 };
