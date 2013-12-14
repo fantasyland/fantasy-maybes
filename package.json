@@ -1,12 +1,9 @@
 {
   "name": "fantasy-options",
-  "version": "0.0.1",
   "description": "Option data structure.",
-  "main": "option.js",
-  "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git://github.com/puffnfresh/fantasy-options.git"
+    "url": "git://github.com/fantasyland/fantasy-options.git"
   },
   "keywords": [
     "fantasyland",
@@ -16,10 +13,25 @@
   "author": "Brian McKenna",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/puffnfresh/fantasy-options/issues"
+    "url": "https://github.com/fantasyland/fantasy-options/issues"
   },
   "dependencies": {
     "daggy": "0.0.1",
     "fantasy-combinators": "0.0.1"
-  }
+  },
+  "devDependencies": {
+    "grunt-cli": "0.1.9",
+    "grunt": "0.4.x",
+    "grunt-contrib-jshint": "0.6.x",
+    "grunt-contrib-nodeunit": "0.2.0",
+    "fantasy-check": "0.1.4",
+    "fantasy-helpers": "0.0.x",
+    "fantasy-identities": "0.0.x"
+  },
+  "scripts": {
+      "test": "grunt"
+  },
+  "files": ["fantasy-options.js", "src/*.js"],
+  "main": "fantasy-options.js",
+  "version": "0.0.2"
 }
