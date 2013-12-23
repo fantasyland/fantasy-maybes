@@ -96,13 +96,12 @@ Option.prototype.sequence = function() {
     }, x);
 };
 Option.prototype.traverse = function(f, p) {
-    return this.cata({
+    var env = this;
+    return env.cata({
         Some: function(x) {
             return p.of(f(x));
         },
-        None: function() {
-            return p.of(Option.None);
-        }
+        None: constant(env)
     });
 };
 

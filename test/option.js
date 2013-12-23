@@ -125,7 +125,7 @@ exports.option = {
 
     'when testing traverse with None should return correct value': λ.check(
         function(a) {
-            return a.traverse(identity, Identity).x === Option.None;
+            return a.traverse(identity, Identity) === Option.None;
         },
         [λ.noneOf()]
     ),
