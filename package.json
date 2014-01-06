@@ -26,7 +26,7 @@
     "grunt-contrib-nodeunit": "0.2.0",
     "fantasy-check": "0.1.4",
     "fantasy-helpers": "0.0.x",
-    "fantasy-identities": "0.0.x"
+    "fantasy-identities": "git+https://github.com/fantasyland/fantasy-identities.git"
   },
   "scripts": {
       "test": "grunt"
