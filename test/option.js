@@ -209,12 +209,7 @@ exports.option = {
             return result === a;
         },
         [λ.AnyVal]
-    )
-
-    /*
-    
-    // Uncomment when fantasy-identites version 0.0.2 has been pushed to npm
-
+    ),
     'when testing sequence with Some should return correct type': λ.check(
         function(a) {
             return isIdentity(a.sequence());
@@ -232,8 +227,7 @@ exports.option = {
             return a.sequence().x.x === a.x.x;
         },
         [λ.someOf(λ.identityOf(Number))]
-    ),
-    */
+    )
 };
 
 exports.optionT = {
