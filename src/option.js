@@ -84,24 +84,17 @@ Option.prototype.ap = function(a) {
     });
 };
 
-Option.prototype.sequence = function() {
-    var x = this.cata({
-        Some: function(x) {
-            return x.constructor;
-        },
-        None: error('Unable to sequence on None')
-    });
-    return this.traverse(function(x) {
-        return x.traverse(identity, Option);
-    }, x);
+Option.prototype.sequence = function(p) {
+    return this.traverse(identity, p);
 };
 Option.prototype.traverse = function(f, p) {
-    var env = this;
-    return env.cata({
+    return this.cata({
         Some: function(x) {
-            return p.of(f(x));
+            return f(x).map(Option.of);
         },
-        None: constant(env)
+        None: function() {
+          return p.of(Option.None);
+        }
     });
 };
 
