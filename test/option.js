@@ -118,26 +118,14 @@ exports.option = {
 
     'when testing traverse with Some should return correct value': λ.check(
         function(a) {
-            return a.traverse(identity, Identity).x === a.x;
+            return a.traverse(function (x) { return Identity.of(x); }, Identity).x.x === a.x;
         },
         [λ.someOf(Number)]
     ),
 
     'when testing traverse with None should return correct value': λ.check(
         function(a) {
-            return a.traverse(identity, Identity) === Option.None;
-        },
-        [λ.noneOf()]
-    ),
-    'when testing sequence with None should throw error': λ.check(
-        function(a) {
-            var msg = '';
-            try {
-                a.sequence();
-            } catch(e) {
-                msg = e.message;
-            }
-            return msg === 'Unable to sequence on None';
+            return a.traverse(function (x) { return Identity.of(x); }, Identity).x === Option.None;
         },
         [λ.noneOf()]
     ),
