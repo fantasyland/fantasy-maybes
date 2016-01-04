@@ -20,16 +20,13 @@
     "fantasy-combinators": "0.0.1"
   },
   "devDependencies": {
-    "grunt-cli": "0.1.9",
-    "grunt": "0.4.x",
-    "grunt-contrib-jshint": "0.6.x",
-    "grunt-contrib-nodeunit": "0.2.0",
+    "nodeunit": "0.9.x",
     "fantasy-check": "0.1.4",
     "fantasy-helpers": "0.0.x",
     "fantasy-identities": "git+https://github.com/fantasyland/fantasy-identities.git"
   },
   "scripts": {
-      "test": "grunt"
+      "test": "node --harmony_destructuring node_modules/.bin/nodeunit test/*.js"
   },
   "files": ["fantasy-options.js", "src/*.js"],
   "main": "fantasy-options.js",

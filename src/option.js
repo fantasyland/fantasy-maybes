@@ -1,3 +1,5 @@
+'use strict';
+
 //
 //   # Option
 //
@@ -15,19 +17,10 @@
 //   * `getOrElse(a)` - Default value for `None`
 //   * `map(f)` - Functor map
 //
-var daggy = require('daggy'),
-    combinators = require('fantasy-combinators'),
+const daggy = require('daggy');
+const {constant, identity} = require('fantasy-combinators');
 
-    constant = combinators.constant,
-    identity = combinators.identity,
-
-    error = function(str) {
-        return function() {
-            throw new Error(str);
-        };
-    },
-
-    Option = daggy.taggedSum({
+const Option = daggy.taggedSum({
         Some: ['x'],
         None: []
     });
@@ -49,39 +42,27 @@ Option.prototype.orElse = function(x) {
 Option.prototype.getOrElse = function(x) {
     return this.fold(
         identity,
-        function() {
-            return x;
-        }
+        constant(x)
     );
 };
 Option.prototype.chain = function(f) {
     return this.fold(
-        function(a) {
-            return f(a);
-        },
-        function() {
-            return Option.None;
-        }
+        (a) => f(a),
+        constant(Option.None)
     );
 };
 Option.prototype.concat = function(x) {
-    return this.chain(function(a) {
-        return x.map(function(b) {
-            return a.concat(b);
-        });
+    return this.chain((a) => {
+        return x.map((b) => a.concat(b));
     });
 };
 
 // Derived
 Option.prototype.map = function(f) {
-    return this.chain(function(a) {
-        return Option.of(f(a));
-    });
+    return this.chain((a) => Option.of(f(a)));
 };
 Option.prototype.ap = function(a) {
-    return this.chain(function(f) {
-        return a.map(f);
-    });
+    return this.chain((f) => a.map(f));
 };
 
 Option.prototype.sequence = function(p) {
@@ -89,65 +70,42 @@ Option.prototype.sequence = function(p) {
 };
 Option.prototype.traverse = function(f, p) {
     return this.cata({
-        Some: function(x) {
-            return f(x).map(Option.of);
-        },
-        None: function() {
-          return p.of(Option.None);
-        }
+        Some: (x) => f(x).map(Option.of),
+        None: () => p.of(Option.None)
     });
 };
 
 // Transformer
-Option.OptionT = function(M) {
-    var OptionT = daggy.tagged('run');
+Option.OptionT = (M) => {
+    const OptionT = daggy.tagged('run');
     OptionT.prototype.fold = function(f, g) {
-        return this.run.chain(function(o) {
-            return M.of(o.fold(f, g));
-        });
+        return this.run.chain((o) => M.of(o.fold(f, g)));
     };
-    OptionT.of = function(x) {
-        return OptionT(M.of(Option.Some(x)));
-    };
+    OptionT.of = (x) => OptionT(M.of(Option.Some(x)));
     OptionT.prototype.orElse = function(b) {
-        return OptionT(this.run.chain(function(a) {
+        return OptionT(this.run.chain((a) => {
             return a.fold(
-                function(x) {
-                    return M.of(a);
-                },
-                function() {
-                    return b.run;
-                }
+                (x) => M.of(a),
+                () => b.run
             );
         }));
     };
     OptionT.prototype.getOrElse = function(x) {
-        return this.run.chain(function(o) {
-            return M.of(o.getOrElse(x));
-        });
+        return this.run.chain((o) => M.of(o.getOrElse(x)));
     };
     OptionT.prototype.chain = function(f) {
-        var m = this.run;
-        return OptionT(m.chain(function(o) {
+        return OptionT(this.run.chain((o) => {
             return o.fold(
-                function(a) {
-                    return f(a).run;
-                },
-                function() {
-                    return M.of(Option.None);
-                }
+                (a) => f(a).run,
+                () => M.of(Option.None)
             );
         }));
     };
     OptionT.prototype.map = function(f) {
-        return this.chain(function(a) {
-            return OptionT.of(f(a));
-        });
+        return this.chain((a) => OptionT.of(f(a)));
     };
     OptionT.prototype.ap = function(a) {
-        return this.chain(function(f) {
-            return a.map(f);
-        });
+        return this.chain((f) => a.map(f));
     };
     return OptionT;
 };
