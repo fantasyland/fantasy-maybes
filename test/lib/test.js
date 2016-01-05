@@ -15,7 +15,7 @@ const Option = require('../../fantasy-options');
 
 const isOption = isInstanceOf(Option);
 const isSome = isInstanceOf(Option.Some);
-const isNone = isInstanceOf(Option.None);
+const isNone = (a) => isOption(a) && !isSome(a);
 const isSomeOf = isInstanceOf(someOf);
 const isNoneOf = isInstanceOf(noneOf);
 const isIdentity = isInstanceOf(Identity);
