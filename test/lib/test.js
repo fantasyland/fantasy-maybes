@@ -84,6 +84,5 @@ const λʹ = λ
         return Option.None;
     });
 
-// Export
-if(typeof module != 'undefined')
-    module.exports = λʹ;
+
+module.exports = λʹ;

@@ -17,7 +17,8 @@
   },
   "dependencies": {
     "daggy": "0.0.1",
-    "fantasy-combinators": "0.0.1"
+    "fantasy-combinators": "0.0.1",
+    "fantasy-land": "git+https://github.com/fantasyland/fantasy-land.git"
   },
   "devDependencies": {
     "nodeunit": "0.9.x",

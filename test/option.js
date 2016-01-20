@@ -1,12 +1,8 @@
 'use strict';
 
 const λ = require('./lib/test');
-const applicative = λ.applicative;
-const functor = λ.functor;
-const monad = λ.monad;
-const identity = λ.identity;
-const Option = λ.Option;
-const Identity = λ.Identity;
+const {applicative, functor, monad, identity} = λ;
+const {Option, Identity} = λ;
 
 function run(a) {
     return a.run.x;
@@ -34,14 +30,14 @@ exports.option = {
 
     // Manual tests
     'when testing Some with concat should return correct value': λ.check(
-        function(a, b) {
+        (a, b) => {
             const result = Option.Some(a).concat(Option.Some(b));
             return λ.equals(result)(Option.Some(a.concat(b)));
         },
         [String, String]
     ),
     'when testing None with concat should return correct value': λ.check(
-        function(a) {
+        (a) => {
             const result = Option.None.concat(Option.Some(a));
             return λ.equals(result)(Option.None);
         },
@@ -49,40 +45,40 @@ exports.option = {
     ),
 
     'when testing traverse with Some should return correct value': λ.check(
-        function(a) {
+        (a) => {
             return a.traverse(function (x) { return Identity.of(x); }, Identity).x.x === a.x;
         },
         [λ.someOf(Number)]
     ),
 
     'when testing traverse with None should return correct value': λ.check(
-        function(a) {
+        (a) => {
             return a.traverse(function (x) { return Identity.of(x); }, Identity).x === Option.None;
         },
         [λ.noneOf()]
     ),
 
     'when testing Some with orElse should return correct value': λ.check(
-        function(a, b) {
+        (a, b) => {
             return λ.equals(Option.Some(a).orElse(b))(Option.Some(a));
         },
         [λ.AnyVal, λ.AnyVal]
     ),
     'when testing None with orElse should return correct value': λ.check(
-        function(a) {
+        (a) => {
             return Option.None.orElse(a) === a;
         },
         [λ.AnyVal]
     ),
 
     'when testing Some with getOrElse should return correct value': λ.check(
-        function(a, b) {
+        (a, b) => {
             return Option.Some(a).getOrElse(b) === a;
         },
         [λ.AnyVal, λ.AnyVal]
     ),
     'when testing None with getOrElse should return correct value': λ.check(
-        function(a) {
+        (a) => {
             return Option.None.getOrElse(a) === a;
         },
         [λ.AnyVal]
@@ -101,7 +97,7 @@ exports.option = {
         test.done();
     },
     'when creating None and folding should map to correct value': λ.check(
-        function(a) {
+        (a) => {
             const result = Option.None.fold(
                     λ.error('Failed if called'),
                     λ.constant(a)
@@ -112,7 +108,7 @@ exports.option = {
     ),
 
     'when creating Some should be Some': λ.check(
-        function(a) {
+        (a) => {
             return Option.Some(a).fold(
                     λ.constant(true),
                     λ.constant(false)
@@ -121,7 +117,7 @@ exports.option = {
         [λ.AnyVal]
     ),
     'when creating Some and folding should map to correct value': λ.check(
-        function(a) {
+        (a) => {
             var result = Option.Some(a).fold(
                     identity,
                     λ.error('Failed if called')
@@ -131,19 +127,19 @@ exports.option = {
         [λ.AnyVal]
     ),
     'when testing sequence with Some should return correct type': λ.check(
-        function(a) {
+        (a) => {
             return λ.isIdentity(a.sequence());
         },
         [λ.someOf(λ.identityOf(Number))]
     ),
     'when testing sequence with Some should return correct nested type': λ.check(
-        function(a) {
+        (a) => {
             return λ.isSome(a.sequence().x);
         },
         [λ.someOf(λ.identityOf(Number))]
     ),
     'when testing sequence with Some should return correct value': λ.check(
-        function(a) {
+        (a) => {
             return a.sequence().x.x === a.x.x;
         },
         [λ.someOf(λ.identityOf(Number))]
