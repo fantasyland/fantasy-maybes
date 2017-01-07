@@ -1,13 +1,13 @@
 {
   "name": "fantasy-options",
-  "description": "Option data structure.",
+  "description": "Maybe data structure.",
   "repository": {
     "type": "git",
     "url": "git://github.com/fantasyland/fantasy-options.git"
   },
   "keywords": [
     "fantasyland",
-    "option",
+    "maybe",
     "monad"
   ],
   "author": "Brian McKenna",

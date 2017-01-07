@@ -1,3 +1,3 @@
-const Option = require('./src/option');
+const Maybe = require('./src/maybe');
 
-module.exports = Option;
+module.exports = Maybe;
