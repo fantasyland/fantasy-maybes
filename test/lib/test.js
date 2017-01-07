@@ -11,13 +11,13 @@ const {isInstanceOf} = require('fantasy-helpers');
 const {constant, identity} = require('fantasy-combinators');
 
 const Identity = require('fantasy-identities');
-const Option = require('../../fantasy-options');
+const Maybe = require('../../fantasy-options');
 
-const isOption = isInstanceOf(Option);
-const isSome = isInstanceOf(Option.Some);
-const isNone = (a) => isOption(a) && !isSome(a);
-const isSomeOf = isInstanceOf(someOf);
-const isNoneOf = isInstanceOf(noneOf);
+const isMaybe = isInstanceOf(Maybe);
+const isJust = isInstanceOf(Maybe.Just);
+const isNothing = (a) => isMaybe(a) && !isJust(a);
+const isJustOf = isInstanceOf(someOf);
+const isNothingOf = isInstanceOf(noneOf);
 const isIdentity = isInstanceOf(Identity);
 const isIdentityOf = isInstanceOf(identityOf);
 
@@ -65,10 +65,10 @@ const λʹ = λ
     .property('equals', equals)
     .property('inc', inc)
     .property('error', error)
-    .property('isSome', isSome)
-    .property('isNone', isNone)
-    .property('isOption', isOption)
-    .property('Option', Option)
+    .property('isJust', isJust)
+    .property('isNothing', isNothing)
+    .property('isMaybe', isMaybe)
+    .property('Maybe', Maybe)
     .property('Identity', Identity)
     .property('isIdentity', isIdentity)
     .property('identityOf', identityOf)
@@ -76,12 +76,12 @@ const λʹ = λ
         return Identity.of(this.arb(a.type, b - 1));
     })
     .property('someOf', someOf)
-    .method('arb', isSomeOf, function(a, b) {
-        return Option.of(this.arb(a.type, b - 1));
+    .method('arb', isJustOf, function(a, b) {
+        return Maybe.of(this.arb(a.type, b - 1));
     })
     .property('noneOf', noneOf)
-    .method('arb', isNoneOf, function(a, b) {
-        return Option.None;
+    .method('arb', isNothingOf, function(a, b) {
+        return Maybe.Nothing;
     });
 
 
